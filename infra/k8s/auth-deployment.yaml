@@ -5,7 +5,7 @@ metadata:
 spec:
   replicas: 1
   selector:
-    mathLabels:
+    matchLabels:
       app: auth
   template:
     metadata:
@@ -28,4 +28,3 @@ spec:
       protocol: TCP
       port: 3000
       targetPort: 3000
-      
