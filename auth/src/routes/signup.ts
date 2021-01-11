@@ -31,7 +31,6 @@ router.post('/api/users/signup',
         if (existingUser) {
             //console.log("Email is already exits!");
             throw new BadRequestError("Email is already in use!");
-            return res.send({});
         }
 
         const user = User.build({ email, password });
