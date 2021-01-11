@@ -15,6 +15,6 @@ export const errorHandler = (
     }
 
     res.status(400).send({
-        errors: [{ message: 'Unexpected Error occurred', }],
+        errors: [{ message: "Unexpected Error Occurred: " + err.message, }],
     });
 };
