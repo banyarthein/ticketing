@@ -6,6 +6,7 @@ import { DatabaseConnectionError } from '../errors/database-connection-error';
 import { RequestValidationError } from '../errors/request-validation-error';
 import { BadRequestError } from '../errors/bad-request-error';
 import { User } from '../models/user'
+import { validateRequest } from '../middlewares/validate-request';
 
 const router = express.Router();
 
@@ -18,14 +19,9 @@ router.post('/api/users/signup',
             .isLength({ min: 4, max: 20 })
             .withMessage('Password must be between 4 and 20 characters.'),
     ],
+    validateRequest,
     async (req: Request, res: Response) => {
         const errs = validationResult(req);
-
-        if (!errs.isEmpty()) {
-            //return res.status(400).send(errs.array());
-            //throw new Error('Invalid email or password')
-            throw new RequestValidationError(errs.array());
-        }
 
         const { email, password } = req.body;
         const existingUser = await User.findOne({ email });
@@ -42,16 +38,18 @@ router.post('/api/users/signup',
         const userJwt = jwt.sign({
             id: user.id,
             email: user.email
-        }, 'ticketing');
+        }, process.env.JWT_KEY!
+            //The ! marks behind the JWT_KEY let typescript know that this environment key is already checked and no need to raise error.
+        );
 
-        console.log(userJwt);
+        //console.log(userJwt);
 
         //Store it on session object
         req.session = {
             jwt: userJwt
         };
 
-        console.log(req.session);
+        //console.log(req.session);
 
         res.status(201).send({ user });
         // new User ({email, password})
