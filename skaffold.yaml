@@ -18,3 +18,11 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest:  .
+    - image: us.gcr.io/advance-anvil-300713/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.js'
+            dest:  .
