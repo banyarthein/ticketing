@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: client
-          image: us.gcr.io/advance-anvil-300713/client
+          image: us.gcr.io/ticketing-uat-999/client
 ---
 apiVersion: v1
 kind: Service

@@ -8,9 +8,9 @@ build:
 #  local:
 #    push: false
   googleCloudBuild:
-    projectId: advance-anvil-300713
+    projectId: ticketing-uat-999
   artifacts:
-    - image: us.gcr.io/advance-anvil-300713/auth
+    - image: us.gcr.io/ticketing-uat-999/auth
       context: auth
       docker:
         dockerfile: Dockerfile
@@ -18,11 +18,11 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest:  .
-    - image: us.gcr.io/advance-anvil-300713/client
+    - image: us.gcr.io/ticketing-uat-999/client
       context: client
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: 'src/**/*.js'
+          - src: '**/*.js'
             dest:  .
