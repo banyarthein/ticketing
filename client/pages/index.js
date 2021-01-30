@@ -9,7 +9,7 @@ LandingPage.getInitialProps = async({req}) =>{
     if(typeof window === "undefined")
     {
         console.log("I am running from server");
-        const {data} = await axios.get('https://ingress-nginx.ingress-nginx.svc.cluster.local/api/users/currentuser',
+        const {data} = await axios.get('http://ingress-nginx.ingress-nginx.svc.cluster.local/api/users/currentuser',
             {
                 headers: req.headers                
             });
