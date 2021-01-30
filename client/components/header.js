@@ -1,14 +1,16 @@
-import { Link } from "next/link";
+import Link from "next/link";
 
-export default({currentUser}) => {
-  return (<nav className="navbar navbar-light bg-light">
-    <Link href="/">
-      <a className="navbar-brand">Git Tix</a>
-    </Link>
-    <div className="d-flex justify-content-end">
-      <ul className="nav d-flex align-items-center">
-        {currentUser ? "Sign out" : "Sign In/Up"}  
-      </ul>
-    </div>
-  </nav>);
-}
+export default ({ currentUser }) => {
+  return (
+    <nav className="navbar navbar-light bg-light">
+      <Link href="/">
+        <a className="navbar-brand">Git Tix</a>
+      </Link>
+      <div className="d-flex justify-content-end">
+        <ul className="nav d-flex align-items-center">
+          {currentUser ? "Sign out" : "Sign In/Up"}
+        </ul>
+      </div>
+    </nav>
+  );
+};
