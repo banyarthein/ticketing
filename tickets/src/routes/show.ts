@@ -1,17 +1,17 @@
-import { NotFoundError } from '@ticketingbnt/common';
-import express, {Request, Response } from 'express';
-import { Ticket} from '../models/tickets';
+import { NotFoundError } from "@ticketingbnt/common";
+import express, { Request, Response } from "express";
+import { Ticket } from  "../models/tickets";
 
 const router = express.Router();
 
-router.get("/api/tivckets/:id", async(req: Request, res: Response) => {
-    const ticket = await Ticket.findById(req.params.id);
+router.get("/api/tickets/:id", async (req: Request, res: Response) => {
+  const ticket = await Ticket.findById(req.params.id);
 
-    if(!ticket) {
-        throw new NotFoundError();
-    }
+  if (!ticket) {
+    throw new NotFoundError();
+  }
 
-    res.send(ticket);
+  res.send(ticket);
 });
 
-export {router as ShowTicketRouter};
+export { router as showTicketRouter };
