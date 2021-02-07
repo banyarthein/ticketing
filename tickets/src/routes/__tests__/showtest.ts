@@ -12,18 +12,14 @@ it("returns a 404 if the ticket is not found", async () => {
 
 });
 
-
-
-
 it("returns the ticket if the ticket is found", async () => {
     const title = "Iron Cross Concert 1"
     const price = 20;
 
     const response = await request(app)
-        .get("/api/tickets/")
+        .post("/api/tickets/")
         .set('Cookie', global.signin())
-        .send(
-            {
+        .send({
                 title, price
             }
         )
