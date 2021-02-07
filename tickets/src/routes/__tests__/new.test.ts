@@ -64,10 +64,13 @@ it("returns an error if an invalid price is provided", async() => {
     .expect(400);
 });
 
-it("returns an error if an invalid aaa is provided", async() => {});
-
-it("returns an error if an invalid bbb is provided", async() => {});
-
-it("returns an error if an invalid ccc is provided", async() => {});
-
-it("creates a ticket with valid inputs", async() => {});
+it("creates a ticket with valid inputs", async() => {
+    await request (app)
+    .post('/api/tickets')
+    .set('Cookie', global.signin())
+    .send({
+        title: 'this is valid title',
+        price: 20
+    })
+    .expect(201);
+});
