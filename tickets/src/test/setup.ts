@@ -43,7 +43,7 @@ global.signin = () => {
 
   //Build a JSONWebToken payload. {id, email}
   const payload = {
-    id: '1jk23j123l',
+    id: new mongoose.Types.ObjectId().toHexString(),
     email: 'tharkhit@bz.com'
   }
 
