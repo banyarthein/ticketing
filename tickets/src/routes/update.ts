@@ -6,7 +6,7 @@ import {Ticket} from "../models/tickets";
 const router = express.Router();
 
 router.put(
-    "/api/tickets:id",
+    "/api/tickets/:id",
     requireAuth,
     async(req: Request, res: Response) => {
         const ticket = await Ticket.findById(req.params.id);
@@ -14,6 +14,7 @@ router.put(
         if(!ticket){
             throw new NotFoundError();
         }
+        
         if(ticket.userId !== req.currentUser!.id){
             throw new NotAuthorizedError();
         }
