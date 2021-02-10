@@ -17,23 +17,25 @@ spec:
           image: nats-streaming:0.17.0
           args:
             [
-              '-p',
-              '4222',
-              '-m',
-              '8222'
-              '-hbi',
-              '5s',
-              '-hbf',
-              '2',
-              '-SD',
-              '-cid',
-              'ticketing'
+              "-p",
+              "4222",
+              "-m",
+              "8222",
+              "-hbi",
+              "5s",
+              "-hbt",
+              "5s",
+              "-hbf",
+              "2",
+              "-SD",
+              "-cid",
+              "ticketing",
             ]
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: nas-service
+  name: nats-service
 spec:
   selector:
     app: nats
