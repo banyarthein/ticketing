@@ -1,4 +1,4 @@
-import nats, {Message} from 'node-nats-streaming';
+import nats, {Message, Stan} from 'node-nats-streaming';
 import {randomBytes} from 'crypto';
 
 console.clear();
@@ -16,10 +16,12 @@ stan.on('connect', () => {
     })
 
     const options = stan.subscriptionOptions()
-                        .setManualAckMode(true);
+                        .setManualAckMode(true)
+                        .setDeliverAllAvailable()
+                        .setDurableName("order-service-channel");
 
     const subscription = stan.subscribe("ticket:created",
-                                        "order-service-quere-group",
+                                        "order-service-channel",
                                         options);
 
     subscription.on("message", (msg: Message) => {
@@ -36,3 +38,50 @@ stan.on('connect', () => {
 
 process.on('STGINT', () => stan.close());
 process.on('SIGTERM', () => stan.close());
+
+
+abstract class Listerner{
+    abstract subject: string;
+    abstract queueGroupName: string;
+    abstract onMessage(data: any, msg: Message): void;
+    private client: Stan;
+    protected ackWait   = 5000;
+
+    constructor (client: Stan)
+    {
+        this.client = client;
+    }
+
+    subscriptionOptions(){
+        return this.client
+            .subscriptionOptions()
+            .setDeliverAllAvailable()
+            .setManualAckMode(true)
+            .setAckWait(this.ackWait)
+            .setDurableName(this.queueGroupName);            
+    }
+
+    listen() {
+        const subscription = this.client.subscribe(
+            this.subject,
+            this.queueGroupName,
+            this.subscriptionOptions()
+        );
+        subscription.on("message", (msg: Message) => {
+            console.log (`Message received $(this.subject / $(this.queueGroupName))`);    
+            const parseData = this.parseMessage (msg);
+            this.onMessage(parseData, msg);
+
+        });
+    
+    }
+
+    parseMessage(msg: Message) {
+        const data = msg.getData();
+        return typeof(data === "string"
+            ? JSON.parse(data)
+            : JSON.parse(data.toString('utf8')));
+    }
+
+}
+
