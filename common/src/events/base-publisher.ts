@@ -1,0 +1,39 @@
+import { rejects } from "assert";
+import {Stan} from "node-nats-streaming";
+import {Subjects} from "./subjects";
+
+interface Event {
+    subject: Subjects;
+    data: any;
+}
+
+export abstract class Publisher <T extends Event> {
+    abstract subject: T["subject"];
+    private client: Stan;
+    
+    constructor (client: Stan) {
+        this.client = client;
+    }
+
+    publish(data: T["data"]) {
+
+        return new Promise<void>((resolve, reject) => {
+            this.client.publish(this.subject, JSON.stringify(data), (err) => {
+                if(err)
+                {   
+                    console.log("Event can't published");
+                    return reject(err);
+                }
+
+                console.log("Event publisherd.");
+                resolve();
+    
+            })
+
+        })
+
+        this.client.publish(this.subject, JSON.stringify(data), () => {
+            console.log("Event published");
+        });
+    }
+}
