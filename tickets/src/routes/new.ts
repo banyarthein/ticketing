@@ -3,6 +3,7 @@ import {body} from 'express-validator';
 import {requireAuth, validateRequest} from '@ticketingbnt/common';
 import { Ticket } from '../models/tickets';
 import {TicketCreatedPublisher} from "../events/publishers/ticket-created-publisher";
+import {natsWrapper} from "../nats-wrapper";
 
 
 const router = express.Router();
@@ -23,7 +24,7 @@ async (req: Request, res: Response) => {
     })
 
     await ticket.save();
-    new TicketCreatedPublisher(client).publish({
+    await new TicketCreatedPublisher(natsWrapper.client).publish({
             id: ticket.id,
             title: ticket.title,
             price: ticket.price,
