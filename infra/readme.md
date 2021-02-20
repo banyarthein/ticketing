@@ -42,7 +42,8 @@ gcloud container clusters get-credentials <cluster name>
 you will see the new kubernetes context in kubernetes tray's dropdown
 
 ```
-gcloud container clusters get-credentials ticketing-dev
+gcloud container clusters get-credentials ticketing-sit-cluster
+
 ```
 
 ## Enable google cloud build
