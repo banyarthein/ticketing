@@ -2,6 +2,8 @@ import request from "supertest";
 import {app} from "../../app";
 import mongoose from "mongoose";
 
+jest.mock("../../nats-wrapper");
+
 
 it("returns a 404 if the provided ID does not exists", async() => 
 {
