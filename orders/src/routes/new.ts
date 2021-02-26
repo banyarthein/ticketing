@@ -1,9 +1,16 @@
 import mongoose from "mongoose";
 import express, {Request, Response} from 'express';
-import {requireAuth, validateRequest} from '@sgtickets/common';
+import {NotFountError, requireAuth, validateRequest}  from '@sgtickets/common';
 import {body} from "express-validator";
+import {Ticket} from "../models/ticket";
+import { Order } from "../models/orders";
+import { BadRequestError, OrderStatus } from "@ticketingbnt/common";
+
+
 
 const router = express.Router();
+const EXPIRATION_WINDOWS_SECONDS = 15 * 60;
+
 
 router.post("/api/orders/:orderId", requireAuth, [
     body("ticketId")
@@ -13,6 +20,34 @@ router.post("/api/orders/:orderId", requireAuth, [
         .withMessage("TicketId must be provided")],
     validateRequest,    
     async (req: Request, res: Response) => {
+    const {ticketId} = req.body;
+
+    const ticket = await Ticket.findById(ticketId);
+    if(!ticket)
+    {
+        throw NotFountError();
+    }
+
+
+    const isReserved = await ticket.isReserved();
+    if(isReserved)
+    {
+        throw new BadRequestError("Ticket is already reserved or sold");
+    }
+
+    //Calcualate an expiration date for this order
+    const expiration = new Date();
+    expiration.setSeconds((expiration.getSeconds() + EXPIRATION_WINDOWS_SECONDS));
+
+    //Build the order to save to the database.
+    const order = Order.build({
+        userId: req.currentUser!.id,
+        status: OrderStatus.Created,
+        expiresAt: expiration,
+        ticket
+    });
+    await order.save();
+
     res.send({});
 });
 
