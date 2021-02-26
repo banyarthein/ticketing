@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import express, {Request, Response} from 'express';
-import {NotFountError, requireAuth, validateRequest}  from '@sgtickets/common';
+import {NotFoundError, requireAuth, validateRequest}  from '@ticketingbnt/common';
 import {body} from "express-validator";
 import {Ticket} from "../models/ticket";
 import { Order } from "../models/orders";
@@ -12,7 +12,7 @@ const router = express.Router();
 const EXPIRATION_WINDOWS_SECONDS = 15 * 60;
 
 
-router.post("/api/orders/:orderId", requireAuth, [
+router.post("/api/orders", requireAuth, [
     body("ticketId")
         .not()
         .isEmpty()
@@ -25,7 +25,7 @@ router.post("/api/orders/:orderId", requireAuth, [
     const ticket = await Ticket.findById(ticketId);
     if(!ticket)
     {
-        throw NotFountError();
+        throw new NotFoundError();
     }
 
 
@@ -48,7 +48,7 @@ router.post("/api/orders/:orderId", requireAuth, [
     });
     await order.save();
 
-    res.send({});
+    res.status(201).send({order});
 });
 
 export {router as newOrderRouter};
