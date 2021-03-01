@@ -46,13 +46,17 @@ it("fetches orders for an particular user", async () => {
 
     const response = await request(app)
         .get("/api/orders")
-        .set("Cookie", global.signin())
+        .set("Cookie", user2)
         .expect(200);
+
+    //console.log("Body ", {body});
+    //console.log("Response.body ", response.body);
+    //console.log("Order", order1);
 
     //Make request to get orders for User #2
     expect(response.body.length).toEqual(2);
-    expect(response.body[0].id).toEqual(order1.id);
-    expect(response.body[1].id).toEqual(order2.id);
+    expect(response.body[0].id).toEqual(order1.order.id);
+    expect(response.body[1].id).toEqual(order2.order.id);
     expect(response.body[0].ticket.id).toEqual(ticket2.id);
     expect(response.body[1].ticket.id).toEqual(ticket3.id);
 })
