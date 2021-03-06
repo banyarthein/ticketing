@@ -3,7 +3,7 @@ import { app } from "./app";
 import { TicketCreatedListener } from "./events/listeners/ticket-created-listener";
 import { TicketUpdatedListener } from "./events/listeners/ticket-updated-listener";
 import { natsWrapper } from "./nats-wrapper";
-}
+
 
 const start = async () => {
 if (!process.env.JWT_KEY) {
