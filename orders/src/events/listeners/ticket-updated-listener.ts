@@ -8,7 +8,9 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
     queueGroupName = qGroupName;
 
     async onMessage(data: TicketUpdatedEvent["data"], msg: Message) {
-        const ticket = await Ticket.findById(data.id);
+        //const ticket = await Ticket.findById(data.id);
+        const ticket = await Ticket.findPreviousVersion(data);
+        
 
         if(!ticket)
         {

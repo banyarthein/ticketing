@@ -20,7 +20,7 @@ async (req: Request, res: Response) => {
     const ticket = Ticket.build({
         title,
         price,
-        userId: req.currentUser!.id,
+        userId: req.currentUser!.id,        
     })
 
     await ticket.save();
@@ -29,6 +29,7 @@ async (req: Request, res: Response) => {
             title: ticket.title,
             price: ticket.price,
             userId: ticket.userId,
+            version: ticket.version,
         });
 
     res.status(201).send(ticket);
